@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F6F7F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F141B" media="(prefers-color-scheme: dark)">
+<title>Relay</title>
+<meta name="description" content="Relay is a free app for trading shifts at your fire department.">
+<link rel="icon" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<main>
+  <div class="brand"><img src="/icon.png" alt=""><span>Relay</span></div>
+  <h1>Shift trades for fire departments</h1>
+  <p class="lead">Post a day you need covered, see who can work it, and agree a trade. Free, with no ads.</p>
+  <div class="badges">
+    <a id="ios" class="badge apple" href="#"><picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/white/en-us">
+        <img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us" alt="Download on the App Store">
+      </picture></a>
+    <a id="android" class="badge google" href="#"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play"></a>
+  </div>
+  <p class="muted">Got an invite? Open the link on your phone, or enter the join code in the app.</p>
+  <footer><a href="/privacy/">Privacy policy</a><a href="/terms/">Terms of use</a></footer>
+</main>
+<script src="/config.js"></script>
+<script src="/store.js"></script>
+<script>
+(async function () {
+  const s = await relayStores();
+  const ios = document.getElementById('ios'), and = document.getElementById('android');
+  ios.href = s.ios; and.href = s.android;
+  // On a phone, that phone's store first.
+  if (relayPlatform() === 'android') and.parentNode.insertBefore(and, ios);
+})();
+</script>
+</body>
+</html>

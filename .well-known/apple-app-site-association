@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "M839BX85D8.com.amandaclouser.relay"
+        ],
+        "components": [
+          {
+            "/": "/j/*",
+            "comment": "Relay invite links"
+          }
+        ]
+      }
+    ]
+  }
+}

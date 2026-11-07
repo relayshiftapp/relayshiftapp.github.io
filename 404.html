@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F6F7F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F141B" media="(prefers-color-scheme: dark)">
+<title>Join on Relay</title>
+<meta name="description" content="You've been invited to a fire department on Relay.">
+<link rel="icon" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<!--
+  GitHub Pages serves this page for every path it doesn't have, so invite links (/j/<code>) land here.
+  With Relay installed, the phone opens the app straight from the link (Universal Links / App Links)
+  and this page never shows. Without it, the page sends people to their store and shows the code to type.
+-->
+<main>
+  <div class="brand"><img src="/icon.png" alt=""><span>Relay</span></div>
+
+  <section id="join" hidden>
+    <h1>You're invited to Relay</h1>
+    <p class="lead">Relay is how your department trades shifts. Get the app, then enter this code to join.</p>
+    <button id="copy" class="code" type="button" aria-label="Copy join code">
+      <span class="code-text"><small id="code-label">Join code</small><b id="code"></b></span>
+      <svg id="copy-icon" class="copy-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
+      <svg id="copied-icon" class="copy-icon" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M5 12l5 5L20 7"/></svg>
+    </button>
+    <div class="badges">
+      <a id="ios" class="badge apple" href="#"><picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/white/en-us">
+        <img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us" alt="Download on the App Store">
+      </picture></a>
+      <a id="android" class="badge google" href="#"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play"></a>
+    </div>
+    <p class="muted">Already have Relay? Open it and enter the code, or tap the invite link again.</p>
+  </section>
+
+  <section id="missing" hidden>
+    <h1>Page not found</h1>
+    <p class="lead">That page doesn't exist.</p>
+    <p><a href="/">Go to Relay</a></p>
+  </section>
+
+  <footer><a href="/privacy/">Privacy policy</a><a href="/terms/">Terms of use</a></footer>
+</main>
+<script src="/config.js"></script>
+<script src="/store.js"></script>
+<script>
+(async function () {
+  const m = location.pathname.match(/^\/j\/([A-Za-z0-9-]{3,24})\/?$/);
+  if (!m) { document.getElementById('missing').hidden = false; return; }
+  const code = decodeURIComponent(m[1]).toUpperCase();
+  document.title = `Join ${code} on Relay`;
+  document.getElementById('code').textContent = code;
+  document.getElementById('join').hidden = false;
+
+  // Tap the code card to copy it: the label and icon say Copied for a moment.
+  const copy = document.getElementById('copy'), label = document.getElementById('code-label');
+  const copyIcon = document.getElementById('copy-icon'), copiedIcon = document.getElementById('copied-icon');
+  copy.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(code); } catch { return; }
+    label.textContent = 'Copied'; copyIcon.toggleAttribute('hidden', true); copiedIcon.toggleAttribute('hidden', false);
+    setTimeout(() => {
+      label.textContent = 'Join code'; copyIcon.toggleAttribute('hidden', false); copiedIcon.toggleAttribute('hidden', true);
+    }, 2000);
+  });
+
+  const stores = await relayStores();
+  // Google Play passes the referrer through the install, so the Android app can fill the code in itself.
+  const android = stores.android && stores.android.includes('play.google.com')
+    ? `${stores.android}${stores.android.includes('?') ? '&' : '?'}referrer=${encodeURIComponent('code=' + code)}`
+    : stores.android;
+  const ios = document.getElementById('ios'), and = document.getElementById('android');
+  ios.href = stores.ios; and.href = android;
+  // Both stores, side by side; on an Android phone, Google Play first.
+  if (relayPlatform() === 'android') and.parentNode.insertBefore(and, ios);
+})();
+</script>
+</body>
+</html>

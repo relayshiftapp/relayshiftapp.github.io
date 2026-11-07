@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.amandaclouser.relay",
+      "sha256_cert_fingerprints": [
+        "4C:C8:39:1E:02:6C:4B:57:FF:59:F5:28:18:A0:08:B3:16:69:EE:44:61:F0:62:A1:71:C9:F8:2B:2D:C9:36:0C"
+      ]
+    }
+  }
+]
